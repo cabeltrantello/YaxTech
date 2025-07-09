@@ -1,3 +1,29 @@
 from fastapi import APIRouter, Request, HTTPException, status
 from fastapi.responses import JSONResponse
 from Backend.App.Db.in_memory_db import mock_db
+
+router = APIRouter()
+
+@router.api_route("/{full_path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"])
+async def catch_all_simulator(request: Request, full_path: str):
+    path_with_leading_slash = f"/{full_path}"
+
+    found_mock = mock_db.find_mock(method=request.method, path=path_with_leading_slash)
+
+    if not found_mock:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={
+                "message": "No mock configuration found for the requested path and method.",
+                "requested_method" : request.method,
+                "requested_path" : path_with_leading_slash
+            }
+        )
+    
+    response_def = found_mock.response
+
+    return JSONResponse(
+        content=response_def.body,
+        status_code=response_def.status_code,
+        headers=response_def.headers
+    )
