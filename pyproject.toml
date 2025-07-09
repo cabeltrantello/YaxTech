@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "tnsp-backend"
+version = "0.1.0"
+description = "Backend for YaxTech Network Simulation Platform"
+authors = ["Carlos Andrés Beltran Tello <cabeltrantello@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.111.0"
+uvicorn = {extras = ["standard], version = "^0.29.0"}
+pydantic = "^2.7.1"
+
+[tool.poetry.dev_dependencies]
+pytest = "^8.2.0"
+httpx = "^0.27.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
