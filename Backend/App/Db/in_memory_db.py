@@ -2,12 +2,8 @@ from typing import Dict, Optional, List
 from Backend.App.Models.mock_request import MockDefinition, DEFAULT_SCENARIO_NAME
 
 class InMemoryMockDatabase:
-    """
-    Singleton class to manage mock configurations in memory.
-    Updated to support full CRUD operations and response scenarios.
-    """
     _instance = None
-
+    
     def __new__(cls):
         if cls._instance is None:
             cls._instance = super(InMemoryMockDatabase, cls).__new__(cls)
