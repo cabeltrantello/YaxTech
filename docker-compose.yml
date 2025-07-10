@@ -18,8 +18,8 @@ services:
   # Frontend UI Service (React)
   frontend_ui_service:
     build:
-      context: ./Frontend # Match case for the frontend folder
-      dockerfile: Dockerfile
+      context: . # Build context is the project root
+      dockerfile: ./Frontend/Dockerfile # Specify path to Dockerfile
     container_name: tnsp_frontend_ui
     expose:
       - "80"
