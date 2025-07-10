@@ -45,3 +45,4 @@ const MockCard = ({ mock_definition_5g_core, onEdit, onDelete }) => {
 };
 
 export default MockCard;
+

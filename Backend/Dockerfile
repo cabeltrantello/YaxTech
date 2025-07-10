@@ -1,34 +1,19 @@
-#Use an official Python runtime as a parent image
-
 FROM python:3.11-slim
-
-#Set the working directory in the container
 
 WORKDIR /app
 
-#Install poetry, we use poetry for robust dependency management.
-
+# Install poetry
 RUN pip install poetry
 
-#Copy only the dependency files to leverage Docker cache
+# Copy dependency definition files from the root context
+COPY pyproject.toml poetry.lock /app/
 
-COPY poetry.lock pyproject.toml /app/
-
-#Install dependencies
-# --no-root: do not install the project itself, only dependencies
-# --no-dev: exclude development dependencies for a smaller production image
-
+# Install dependencies, excluding development ones for a lean image
 RUN poetry install --no-root --no-dev
 
-#Copy the application code into the container
+# Copy the application code into the container
+# The source path is relative to the build context (project root)
+COPY ./Backend/App /app/App
 
-COPY ./backend/app /app/backend/app
-
-#Expose the port the app runs on
-
-EXPOSE 8000
-
-#Command to run the application using uvicorn (lightning-fast ASGI server)
-
-CMD ["poetry", "run", "uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
-
+# Command to run the application using uvicorn
+CMD ["poetry", "run", "uvicorn", "App.main:app", "--host", "0.0.0.0", "--port", "8000"]

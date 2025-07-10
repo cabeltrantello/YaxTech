@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import apiClient from './services/apiClient';
 import Header from './components/Header';
-import MockCard from './Components/MockCard';
-import MockForm from './Components/MockForm';
-import Notification from './Components/Notification';
+import MockCard from './components/MockCard';
+import MockForm from './components/MockForm';
+import Notification from './components/Notification';
 import { PlusCircle } from 'lucide-react';
 
 function App() {
