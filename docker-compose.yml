@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # Backend API Service (FastAPI)
+  backend_api_service:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: tnsp_backend_api
+    environment:
+      # Pass the API key to the backend container
+      # It's recommended to use a .env file for this in a real scenario
+      - MASTER_API_KEY=${MASTER_API_KEY:-super-secret-dev-key}
+    command: poetry run uvicorn Backend.App.main:app --host 0.0.0.0 --port 8000
+    volumes:
+      - ./Backend:/app # Mount for hot-reloading in development
+    expose:
+      - "8000" # Expose port to other services in the network, not to the host
+
+  # Frontend UI Service (React)
+  frontend_ui_service:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    container_name: tnsp_frontend_ui
+    expose:
+      - "80" # Nginx in the container listens on port 80
+
+  # NGINX Reverse Proxy - The main entry point for all traffic
+  nginx_reverse_proxy:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile  # We will create a simple Dockerfile for nginx
+    container_name: tnsp_reverse_proxy
+    ports:
+      # Map host port 80 to container port 80
+      - "80:80"
+    depends_on:
+      - backend_api_service
+      - frontend_ui_service
+
